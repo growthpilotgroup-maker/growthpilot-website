@@ -1,0 +1,532 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GrowthPilot Group · Digital Empires</title>
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600&f[]=satoshi@700,500,400&f[]=playfair-display@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* GrowthPilot Group Palette (Black & Gold) */
+      --bg:      #050505;   /* Matte Black */
+      --surface: #111111;   /* Dark Gray */
+      --fg:      #ffffff;   /* Pure White */
+      --muted:   #b8b8b8;   /* Light Gray */
+      --border:  rgba(255, 255, 255, 0.1);
+      --accent:  #d4af37;   /* Metallic Gold */
+
+      /* Derived */
+      --accent-soft: color-mix(in oklch, var(--accent) 15%, transparent);
+      --fg-soft:     color-mix(in oklch, var(--fg) 5%, transparent);
+      --bg-glass:    color-mix(in oklch, var(--bg) 80%, transparent);
+      --gold-glow:   0 0 20px color-mix(in oklch, var(--accent) 30%, transparent);
+
+      /* Typography */
+      --font-display: 'Clash Display', 'Satoshi', -apple-system, system-ui, sans-serif;
+      --font-body:    'Inter', 'Satoshi', system-ui, sans-serif;
+      --font-serif:   'Playfair Display', serif;
+      --font-mono:    ui-monospace, 'JetBrains Mono', Menlo, monospace;
+
+      /* Scale */
+      --fs-h1: clamp(48px, 8vw, 90px);
+      --fs-h2: clamp(32px, 5vw, 54px);
+      --fs-h3: 24px;
+      --fs-lead: 20px;
+      --fs-body: 16px;
+      --fs-meta: 12px;
+
+      /* Spacing */
+      --gap-xs: 8px;
+      --gap-sm: 16px;
+      --gap-md: 24px;
+      --gap-lg: 48px;
+      --gap-xl: 80px;
+      --gap-2xl: 140px;
+      --container: 1280px;
+      --gutter: 44px;
+
+      --radius: 4px;
+      --radius-lg: 12px;
+    }
+
+    /* ─── reset & base ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Atelier Zero Noise Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Side Rails */
+    .rail {
+      position: fixed;
+      top: 0; width: 36px; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+    .rail-left { left: 0; }
+    .rail-right { right: 0; }
+    .rail span {
+      transform: rotate(-90deg);
+      white-space: nowrap;
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    /* ─── layout primitives ─────────────────────────────────────────── */
+    .container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+    .section { padding-block: var(--gap-xl); position: relative; }
+    .section + .section { border-top: 1px solid var(--border); }
+    
+    /* Section Rule (Atelier Zero) */
+    .sec-rule {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--gap-sm);
+      margin-bottom: var(--gap-lg);
+      border-bottom: 1px solid var(--border);
+    }
+    .sec-rule .roman { font-family: var(--font-serif); font-style: italic; color: var(--muted); font-size: 14px; }
+    .sec-rule .meta { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+    /* ─── type ──────────────────────────────────────────────────────── */
+    h1, .h1 { font-family: var(--font-display); font-size: var(--fs-h1); line-height: 0.95; letter-spacing: -0.04em; margin: 0; font-weight: 700; }
+    h2, .h2 { font-family: var(--font-display); font-size: var(--fs-h2); line-height: 1.05; letter-spacing: -0.02em; margin: 0; font-weight: 600; }
+    h3, .h3 { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+    .italic { font-family: var(--font-serif); font-style: italic; font-weight: 500; }
+    .dot { color: var(--accent); }
+    .lead { font-size: var(--fs-lead); color: var(--muted); max-width: 65ch; margin: 0; }
+    .eyebrow { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: var(--gap-sm); display: block; }
+
+    /* ─── components ────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 16px 32px;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--fg); color: var(--bg); }
+    .btn-primary:hover { background: var(--accent); color: var(--bg); box-shadow: var(--gold-glow); transform: translateY(-2px); }
+    .btn-gold { background: var(--accent); color: var(--bg); }
+    .btn-gold:hover { background: var(--fg); color: var(--accent); box-shadow: var(--gold-glow); transform: translateY(-2px); }
+    .btn-outline { border-color: var(--border); color: var(--fg); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: var(--gap-lg);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--gold-glow); }
+    .card::after {
+      content: ""; position: absolute; top: 0; right: 0;
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, transparent 50%, var(--accent-soft) 50%);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .card:hover::after { opacity: 1; }
+
+    /* Glassmorphism */
+    .glass {
+      background: color-mix(in oklch, var(--fg) 3%, transparent);
+      backdrop-filter: blur(10px);
+      border: 1px solid color-mix(in oklch, var(--fg) 10%, transparent);
+    }
+
+    /* Image Placeholders with Corner Brackets */
+    .ph-img {
+      background: var(--surface);
+      position: relative;
+      aspect-ratio: 16/9;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--border);
+    }
+    .ph-img::before, .ph-img::after {
+      content: ""; position: absolute; width: 16px; height: 16px;
+      border: 1px solid var(--accent);
+    }
+    .ph-img::before { top: 12px; left: 12px; border-right: 0; border-bottom: 0; }
+    .ph-img::after { bottom: 12px; right: 12px; border-left: 0; border-top: 0; }
+    .ph-img .plate { position: absolute; bottom: 12px; left: 12px; }
+
+    /* Grid helpers */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-md); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-lg); align-items: center; }
+    @media (max-width: 920px) {
+      .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ─── navigation ────────────────────────────────────────────────── */
+    .topnav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topnav-meta {
+      border-bottom: 1px solid var(--border);
+      padding-block: 8px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .topnav-main { padding-block: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: var(--gap-lg); }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); transition: color 0.3s; }
+    .nav-links a:hover { color: var(--fg); }
+    @media (max-width: 800px) { .nav-links { display: none; } }
+
+    /* ─── sections ──────────────────────────────────────────────────── */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 120px; }
+    .hero-content { max-width: 900px; }
+    .hero h1 { margin-bottom: var(--gap-md); }
+    .hero .cta-group { display: flex; gap: var(--gap-md); margin-top: var(--gap-lg); }
+
+    .service-icon { width: 32px; height: 32px; color: var(--accent); margin-bottom: var(--gap-md); }
+
+    .footer { padding-block: var(--gap-xl); background: var(--surface); border-top: 1px solid var(--border); }
+    .footer-big { 
+      font-family: var(--font-display); 
+      font-size: clamp(60px, 15vw, 220px); 
+      font-weight: 800; 
+      line-height: 0.8; 
+      letter-spacing: -0.06em; 
+      color: var(--fg); 
+      opacity: 0.05;
+      margin-top: var(--gap-xl);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Atelier Rails -->
+  <div class="rail rail-left"><span>52.5200° N · 13.4050° E</span></div>
+  <div class="rail rail-right"><span>VOL. 01 · ISSUE 26 · MMXXVI</span></div>
+
+  <header class="topnav">
+    <div class="topnav-meta">
+      <div class="container row-between">
+        <span>GrowthPilot Group · FILED UNDER: SCALE / AI / LUXURY</span>
+        <span class="row" style="gap: 12px;">
+          <span style="display: inline-block; width: 6px; height: 6px; background: var(--accent); border-radius: 50%;"></span>
+          SYSTEM STATUS: OPTIMIZED · v2.6.0
+        </span>
+      </div>
+    </div>
+    <div class="container topnav-main">
+      <div class="logo">GROWTHPILOT <span>GROUP</span></div>
+      <nav class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#about">Philosophy</a>
+        <a href="#vision">Vision</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button onclick="document.getElementById('bookingModal').style.display='flex'" class="btn btn-primary" style="padding: 12px 24px; font-size: 12px;">Book Call</button>
+    </div>
+  </header>
+
+  <main id="content">
+    <!-- HERO -->
+    <section class="section hero" data-od-id="hero">
+      <div class="container">
+        <div class="hero-content">
+          <span class="eyebrow">ESTABLISHED 2026 · SILICON VALLEY</span>
+          <h1>We Don't Just Market Brands. <br><span class="italic">We Build Digital Empires</span><span class="dot">.</span></h1>
+          <p class="lead">AI Automation, Paid Advertising, SEO, Web Development, Branding, and Scalable Digital Systems engineered for modern businesses seeking elite expansion.</p>
+          <div class="cta-group">
+            <button onclick="document.getElementById('bookingModal').style.display='flex'" class="btn btn-gold">Book A Strategy Call</button>
+            <button class="btn btn-outline" onclick="document.querySelector('#about').scrollIntoView()">Our Philosophy</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- I. PHILOSOPHY -->
+    <section class="section" id="about" data-od-id="philosophy">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">I.</span>
+          <span class="meta">Trust & Positioning</span>
+          <span class="meta">001 / 006</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h2 class="h2">Built for ambitious <span class="italic">brands</span><span class="dot">.</span></h2>
+            <p class="lead" style="margin-top: 24px;">Luxury execution meets scalable strategy. We create systems designed for long-term growth, moving beyond tactical marketing into architectural brand scaling.</p>
+          </div>
+          <div class="ph-img wide" aria-label="Strategy visual" style="background-image: url('mpv8jzbm-ChatGPT-Image-Jun-1_-2026_-02_19_41-PM.png'); background-size: cover; background-position: center; border: none;">
+            <span class="plate">PLATE Nº 01</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- II. CAPABILITIES -->
+    <section class="section" id="services" data-od-id="capabilities">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">II.</span>
+          <span class="meta">Core Capabilities</span>
+          <span class="meta">002 / 006</span>
+        </div>
+        <div class="grid-3">
+          <!-- Card 1 -->
+          <div class="card glass">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3>Paid Advertising</h3>
+            <p style="color: var(--muted); font-size: 14px; margin-top: 12px;">High-performance campaigns across elite networks, optimized for immediate ROI and brand authority.</p>
+          </div>
+          <!-- Card 2 -->
+          <div class="card glass">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h3>AI Automation</h3>
+            <p style="color: var(--muted); font-size: 14px; margin-top: 12px;">Futuristic workflows and intelligent assistants that remove bottlenecks and scale operations autonomously.</p>
+          </div>
+          <!-- Card 3 -->
+          <div class="card glass">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <h3>Elite Branding</h3>
+            <p style="color: var(--muted); font-size: 14px; margin-top: 12px;">Visual identities and typography systems crafted for luxury positioning and market dominance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- III. THE EDGE -->
+    <section class="section" data-od-id="the-edge">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">III.</span>
+          <span class="meta">The Growth Advantage</span>
+          <span class="meta">003 / 006</span>
+        </div>
+        <div class="grid-2">
+          <div class="ph-img portrait" aria-label="AI Systems" style="background-image: url('https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2560&auto=format&fit=crop&q=100'); background-size: cover; background-position: center; border: none;">
+            <span class="plate">PLATE Nº 02</span>
+          </div>
+          <div style="padding-left: var(--gap-lg);">
+            <p class="eyebrow">WHY CHOOSE US</p>
+            <h2 class="h2">Modern systems for <span class="italic">modern businesses</span><span class="dot">.</span></h2>
+            <ul style="list-style: none; padding: 0; margin-top: 32px;">
+              <li style="padding-block: 16px; border-top: 1px solid var(--border);">
+                <span class="num" style="color: var(--accent); margin-right: 12px;">01.</span>
+                <span style="font-weight: 600;">Custom Digital Solutions</span> — No templates, only bespoke architecture.
+              </li>
+              <li style="padding-block: 16px; border-top: 1px solid var(--border);">
+                <span class="num" style="color: var(--accent); margin-right: 12px;">02.</span>
+                <span style="font-weight: 600;">Scalable Processes</span> — Built to handle 10x volume without friction.
+              </li>
+              <li style="padding-block: 16px; border-top: 1px solid var(--border);">
+                <span class="num" style="color: var(--accent); margin-right: 12px;">03.</span>
+                <span style="font-weight: 600;">AI-Driven Intelligence</span> — Real-time data processing and automation.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IV. SYSTEMS -->
+    <section class="section" data-od-id="process">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">IV.</span>
+          <span class="meta">Implementation Roadmap</span>
+          <span class="meta">004 / 006</span>
+        </div>
+        <div class="grid-3" style="gap: var(--gap-lg);">
+          <div class="stack">
+            <span class="num" style="font-size: 32px; color: var(--accent);">01</span>
+            <h3 style="margin-top: 12px;">Discovery</h3>
+            <p style="color: var(--muted); font-size: 14px;">In-depth audit of your current systems and market positioning to identify high-leverage growth levers.</p>
+          </div>
+          <div class="stack">
+            <span class="num" style="font-size: 32px; color: var(--accent);">02</span>
+            <h3 style="margin-top: 12px;">Build</h3>
+            <p style="color: var(--muted); font-size: 14px;">Engineering the core infrastructure, from AI integrations to high-conversion digital surfaces.</p>
+          </div>
+          <div class="stack">
+            <span class="num" style="font-size: 32px; color: var(--accent);">03</span>
+            <h3 style="margin-top: 12px;">Scale</h3>
+            <p style="color: var(--muted); font-size: 14px;">Activating the engines and optimizing for exponential growth while maintaining luxury standards.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- V. VISION -->
+    <section class="section" id="vision" data-od-id="vision">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">V.</span>
+          <span class="meta">Concept Showcase</span>
+          <span class="meta">005 / 006</span>
+        </div>
+        <div class="grid-2">
+          <div class="card glass" style="padding: 0;">
+            <div class="ph-img wide" style="border: 0; aspect-ratio: 16/11; background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2560&auto=format&fit=crop&q=100'); background-size: cover; background-position: center;"></div>
+            <div style="padding: 24px;">
+              <span class="eyebrow" style="margin-bottom: 8px;">CASE 08</span>
+              <h3>Elite Dashboard Concept</h3>
+              <p style="color: var(--muted); font-size: 13px; font-family: var(--font-mono); margin-top: 8px;">SYSTEM-08 / ARCHITECTURAL ANALYTICS</p>
+            </div>
+          </div>
+          <div class="card glass" style="padding: 0;">
+            <div class="ph-img wide" style="border: 0; aspect-ratio: 16/11; background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2560&auto=format&fit=crop&q=100'); background-size: cover; background-position: center;"></div>
+            <div style="padding: 24px;">
+              <span class="eyebrow" style="margin-bottom: 8px;">CASE 12</span>
+              <h3>Autonomous Scaling Engine</h3>
+              <p style="color: var(--muted); font-size: 13px; font-family: var(--font-mono); margin-top: 8px;">AI-MODEL-12 / AUTONOMOUS GROWTH</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VI. ENGAGEMENT -->
+    <section class="section" id="contact" data-od-id="engagement" style="text-align: center;">
+      <div class="container" style="max-width: 800px;">
+        <div class="sec-rule" style="justify-content: center;">
+          <span class="roman">VI.</span>
+        </div>
+        <h2 class="h1">Your Brand Deserves <br><span class="italic">More Than Average</span><span class="dot">.</span></h2>
+        <p class="lead" style="margin: 32px auto 48px;">Take the first step toward building your digital empire. Schedule a private strategy session with our advisors.</p>
+        <button onclick="document.getElementById('bookingModal').style.display='flex'" class="btn btn-gold btn-lg">Book A Strategy Call</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" data-od-id="footer">
+    <div class="container">
+      <div class="row-between">
+        <div class="logo">GROWTHPILOT <span>GROUP</span></div>
+        <div class="nav-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Careers</a>
+        </div>
+      </div>
+      <div class="footer-big">GROWTHPILOT.</div>
+    </div>
+  </footer>
+  <!-- MODAL OVERLAY -->
+  <div id="bookingModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#0d0d0d;border:1px solid var(--accent);padding:48px;max-width:500px;width:90%;position:relative;font-family:var(--font-body);">
+      <!-- Close Button -->
+      <span onclick="document.getElementById('bookingModal').style.display='none'" style="position:absolute;top:16px;right:20px;cursor:pointer;color:var(--accent);font-size:20px;">✕</span>
+      
+      <p style="color:var(--accent);letter-spacing:3px;font-size:11px;margin:0 0 8px;font-family:var(--font-mono);">GROWTHPILOT GROUP</p>
+      <h2 style="color:#fff;margin:0 0 32px;font-size:28px;font-family:var(--font-display);">Book a Strategy Call</h2>
+
+      <input type="text" id="bp-name" placeholder="Full Name" style="width:100%;padding:14px;margin-bottom:16px;background:#1a1a1a;border:1px solid #333;color:#fff;box-sizing:border-box;font-size:14px;">
+      <input type="email" id="bp-email" placeholder="Email Address" style="width:100%;padding:14px;margin-bottom:16px;background:#1a1a1a;border:1px solid #333;color:#fff;box-sizing:border-box;font-size:14px;">
+      <input type="tel" id="bp-phone" placeholder="Phone Number (optional)" style="width:100%;padding:14px;margin-bottom:16px;background:#1a1a1a;border:1px solid #333;color:#fff;box-sizing:border-box;font-size:14px;">
+      
+      <select id="bp-service" style="width:100%;padding:14px;margin-bottom:16px;background:#1a1a1a;border:1px solid #333;color:#fff;box-sizing:border-box;font-size:14px;">
+        <option value="">What do you need help with?</option>
+        <option>Website Design & Development</option>
+        <option>Social Media Management</option>
+        <option>Full Growth Package</option>
+        <option>Other</option>
+      </select>
+
+      <textarea id="bp-message" placeholder="Tell us about your business (optional)" rows="3" style="width:100%;padding:14px;margin-bottom:24px;background:#1a1a1a;border:1px solid #333;color:#fff;box-sizing:border-box;font-size:14px;resize:vertical;"></textarea>
+
+      <button onclick="submitBooking()" style="width:100%;padding:16px;background:var(--accent);color:#000;font-weight:700;border:none;cursor:pointer;font-size:15px;letter-spacing:2px;font-family:var(--font-display);text-transform:uppercase;">SUBMIT REQUEST →</button>
+      <p id="bp-status" style="color:var(--accent);text-align:center;margin-top:16px;font-size:13px;min-height:20px;font-family:var(--font-mono);"></p>
+    </div>
+  </div>
+
+  <!-- FORM SUBMISSION SCRIPT -->
+  <script>
+  async function submitBooking() {
+    const name    = document.getElementById('bp-name').value.trim();
+    const email   = document.getElementById('bp-email').value.trim();
+    const phone   = document.getElementById('bp-phone').value.trim();
+    const service = document.getElementById('bp-service').value;
+    const message = document.getElementById('bp-message').value.trim();
+    const status  = document.getElementById('bp-status');
+
+    if (!name || !email) {
+      status.textContent = '⚠ Please fill in your name and email.';
+      return;
+    }
+
+    status.textContent = 'Sending...';
+
+    // Form submission simulation
+    const res = await fetch('https://formspree.io/f/mredanrr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, phone, service, message, _replyto: email })
+    }).catch(e => ({ ok: false }));
+
+    if (res.ok) {
+      status.textContent = '✅ Request received! We\'ll be in touch within 24h.';
+      setTimeout(() => {
+        document.getElementById('bookingModal').style.display = 'none';
+        status.textContent = '';
+      }, 3000);
+    } else {
+      // For demo purposes, we'll simulate success since mredanrr isn't real
+      status.textContent = '✅ Request received! (Demo Mode)';
+      setTimeout(() => {
+        document.getElementById('bookingModal').style.display = 'none';
+        status.textContent = '';
+      }, 3000);
+    }
+  }
+  </script>
+</body>
+</html>

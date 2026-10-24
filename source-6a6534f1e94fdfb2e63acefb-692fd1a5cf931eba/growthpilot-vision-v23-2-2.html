@@ -1,0 +1,500 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GrowthPilot Group · Digital Empires</title>
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600&f[]=satoshi@700,500,400&f[]=playfair-display@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* GrowthPilot Group Palette (Black & Gold) */
+      --bg:      #050505;   /* Matte Black */
+      --surface: #111111;   /* Dark Gray */
+      --fg:      #ffffff;   /* Pure White */
+      --muted:   #b8b8b8;   /* Light Gray */
+      --border:  rgba(255, 255, 255, 0.1);
+      --accent:  #d4af37;   /* Metallic Gold */
+
+      /* Derived */
+      --accent-soft: color-mix(in oklch, var(--accent) 15%, transparent);
+      --fg-soft:     color-mix(in oklch, var(--fg) 5%, transparent);
+      --bg-glass:    color-mix(in oklch, var(--bg) 80%, transparent);
+      --gold-glow:   0 0 20px color-mix(in oklch, var(--accent) 30%, transparent);
+
+      /* Typography */
+      --font-display: 'Clash Display', 'Satoshi', -apple-system, system-ui, sans-serif;
+      --font-body:    'Inter', 'Satoshi', system-ui, sans-serif;
+      --font-serif:   'Playfair Display', serif;
+      --font-mono:    ui-monospace, 'JetBrains Mono', Menlo, monospace;
+
+      /* Scale */
+      --fs-h1: clamp(48px, 8vw, 90px);
+      --fs-h2: clamp(32px, 5vw, 54px);
+      --fs-h3: 24px;
+      --fs-lead: 20px;
+      --fs-body: 16px;
+      --fs-meta: 12px;
+
+      /* Spacing */
+      --gap-xs: 8px;
+      --gap-sm: 16px;
+      --gap-md: 24px;
+      --gap-lg: 48px;
+      --gap-xl: 80px;
+      --gap-2xl: 140px;
+      --container: 1280px;
+      --gutter: 44px;
+
+      --radius: 4px;
+      --radius-lg: 12px;
+    }
+
+    /* ─── reset & base ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Atelier Zero Noise Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Side Rails */
+    .rail {
+      position: fixed;
+      top: 0; width: 36px; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+    .rail-left { left: 0; }
+    .rail-right { right: 0; }
+    .rail span {
+      transform: rotate(-90deg);
+      white-space: nowrap;
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    /* ─── layout primitives ─────────────────────────────────────────── */
+    .container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+    .section { padding-block: var(--gap-xl); position: relative; }
+    .section + .section { border-top: 1px solid var(--border); }
+    
+    /* Section Rule (Atelier Zero) */
+    .sec-rule {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--gap-sm);
+      margin-bottom: var(--gap-lg);
+      border-bottom: 1px solid var(--border);
+    }
+    .sec-rule .roman { font-family: var(--font-serif); font-style: italic; color: var(--muted); font-size: 14px; }
+    .sec-rule .meta { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+    /* ─── type ──────────────────────────────────────────────────────── */
+    h1, .h1 { font-family: var(--font-display); font-size: var(--fs-h1); line-height: 0.95; letter-spacing: -0.04em; margin: 0; font-weight: 700; }
+    h2, .h2 { font-family: var(--font-display); font-size: var(--fs-h2); line-height: 1.05; letter-spacing: -0.02em; margin: 0; font-weight: 600; }
+    h3, .h3 { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+    .italic { font-family: var(--font-serif); font-style: italic; font-weight: 500; }
+    .dot { color: var(--accent); }
+    .lead { font-size: var(--fs-lead); color: var(--muted); max-width: 65ch; margin: 0; }
+    .eyebrow { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: var(--gap-sm); display: block; }
+
+    /* ─── components ────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 16px 32px;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--fg); color: var(--bg); }
+    .btn-primary:hover { background: var(--accent); color: var(--bg); box-shadow: var(--gold-glow); transform: translateY(-2px); }
+    .btn-gold { background: var(--accent); color: var(--bg); }
+    .btn-gold:hover { background: var(--fg); color: var(--accent); box-shadow: var(--gold-glow); transform: translateY(-2px); }
+    .btn-outline { border-color: var(--border); color: var(--fg); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: var(--gap-lg);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--gold-glow); }
+
+    /* Glassmorphism */
+    .glass {
+      background: color-mix(in oklch, var(--fg) 3%, transparent);
+      backdrop-filter: blur(10px);
+      border: 1px solid color-mix(in oklch, var(--fg) 10%, transparent);
+    }
+
+    /* Grid helpers */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-md); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-lg); align-items: start; }
+    @media (max-width: 920px) {
+      .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ─── navigation ────────────────────────────────────────────────── */
+    .topnav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topnav-main { padding-block: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: var(--gap-lg); }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); transition: color 0.3s; }
+    .nav-links a:hover { color: var(--fg); }
+
+    /* ─── sections ──────────────────────────────────────────────────── */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 120px; }
+    .hero h1 { margin-bottom: var(--gap-md); }
+    .hero .cta-group { display: flex; gap: var(--gap-md); margin-top: var(--gap-lg); }
+
+    .footer { padding-block: var(--gap-xl); background: var(--surface); border-top: 1px solid var(--border); }
+    .footer-big { 
+      font-family: var(--font-display); 
+      font-size: clamp(60px, 15vw, 220px); 
+      font-weight: 800; 
+      line-height: 0.8; 
+      letter-spacing: -0.06em; 
+      color: var(--fg); 
+      opacity: 0.05;
+      margin-top: var(--gap-xl);
+      text-align: center;
+    }
+
+    .qualifier-list { list-style: none; padding: 0; margin-top: 32px; }
+    .qualifier-list li { 
+      padding-block: 16px; 
+      border-top: 1px solid var(--border); 
+      display: flex; 
+      align-items: start; 
+      gap: 12px;
+      font-size: 15px;
+    }
+    .qualifier-list li svg { width: 18px; height: 18px; margin-top: 4px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <!-- Atelier Rails -->
+  <div class="rail rail-left"><span></span></div>
+  <div class="rail rail-right"><span></span></div>
+
+  <header class="topnav">
+    <div class="container topnav-main">
+      <div class="logo">GROWTHPILOT <span>GROUP</span></div>
+      <nav class="nav-links">
+        <a href="#architect">Architect</a>
+        <a href="#services">Services</a>
+        <a href="#results">Results</a>
+        <a href="#qualifiers">Qualifiers</a>
+        <a href="#vision">Vision</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button onclick="document.getElementById('bookingModal').style.display='flex'" class="btn btn-primary" style="padding: 12px 24px; font-size: 12px;">Book Call</button>
+    </div>
+  </header>
+
+  <main id="content">
+    <!-- HERO -->
+    <section class="section hero" data-od-id="hero">
+      <div class="container">
+        <div class="hero-content">
+          <span class="eyebrow">ESTABLISHED 2026 · SILICON VALLEY</span>
+          <h1>We Don't Just Market Brands. <br><span class="italic">We Build Digital Empires</span><span class="dot">.</span></h1>
+          <p class="lead">AI Automation, Paid Advertising, SEO, Web Development, Branding, and Scalable Digital Systems engineered for modern businesses seeking elite expansion.</p>
+          <div class="cta-group">
+            <button onclick="document.getElementById('bookingModal').style.display='flex'" class="btn btn-gold">Book A Strategy Call</button>
+            <button class="btn btn-outline" onclick="document.querySelector('#architect').scrollIntoView()">Meet The Architect</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- I. ARCHITECT -->
+    <section class="section" id="architect" data-od-id="architect">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">I.</span>
+          <span class="meta">The Architect</span>
+          <span class="meta">001 / 009</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h2 class="h2">Built by Someone Who's <span class="italic">Solved This Before</span><span class="dot">.</span></h2>
+            <p class="lead" style="margin-top: 24px;">I started GrowthPilot after engineering high-scale AI infrastructure for silicon valley firms. I saw too many brands losing 30% of their revenue to slow manual processes and disconnected marketing stacks.</p>
+            <p class="lead" style="margin-top: 16px;">We don't just "run ads"—we build the autonomous technical foundations that ensure your brand scales without breaking.</p>
+          </div>
+          <div style="aspect-ratio: 1; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;">
+             Professional Portrait Placeholder
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- II. PHILOSOPHY -->
+    <section class="section" id="about" data-od-id="philosophy">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">II.</span>
+          <span class="meta">Trust & Positioning</span>
+          <span class="meta">002 / 009</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h2 class="h2">Built for ambitious <span class="italic">brands</span><span class="dot">.</span></h2>
+            <p class="lead" style="margin-top: 24px;">Luxury execution meets scalable strategy. We create systems designed for long-term growth, moving beyond tactical marketing into architectural brand scaling.</p>
+          </div>
+          <div style="aspect-ratio: 16/9; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;">
+             Strategy Visual Placeholder
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- III. CAPABILITIES -->
+    <section class="section" id="services" data-od-id="capabilities">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">III.</span>
+          <span class="meta">Core Capabilities</span>
+          <span class="meta">003 / 009</span>
+        </div>
+        <div class="grid-3">
+          <div class="card glass">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px; color:var(--accent);"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <h3 style="margin-top:20px;">Paid Advertising</h3>
+            <p style="color: var(--muted); font-size: 14px; margin-top: 12px;">High-performance campaigns across elite networks, optimized for immediate ROI and brand authority.</p>
+          </div>
+          <div class="card glass">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px; color:var(--accent);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <h3 style="margin-top:20px;">Stop the Leaks Costing You Clients</h3>
+            <p style="color: var(--muted); font-size: 14px; margin-top: 12px;">Every missed call after hours is a lost booking. We build systems that follow up in under 60 seconds, 24/7, so no high-value lead slips through a slow response time.</p>
+          </div>
+          <div class="card glass">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px; color:var(--accent);"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            <h3 style="margin-top:20px;">Elite Branding</h3>
+            <p style="color: var(--muted); font-size: 14px; margin-top: 12px;">Visual identities and typography systems crafted for luxury positioning and market dominance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IV. RESULTS -->
+    <section class="section" id="results" data-od-id="results">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">IV.</span>
+          <span class="meta">Proven Impact</span>
+          <span class="meta">004 / 009</span>
+        </div>
+        <h2 class="h2" style="margin-bottom: var(--gap-lg);">Real Results for <span class="italic">Real Businesses</span><span class="dot">.</span></h2>
+        <div class="grid-3">
+          <div class="card glass">
+            <div style="font-family: var(--font-display); font-size: 48px; font-weight: 700; color: var(--accent);">90s</div>
+            <h3 style="margin-top: 12px;">Response Time</h3>
+            <p style="color: var(--muted); font-size: 14px;">Enterprise clients reduced lead response from 4 hours to 90 seconds via AI automation.</p>
+          </div>
+          <div class="card glass">
+            <div style="font-family: var(--font-display); font-size: 48px; font-weight: 700; color: var(--accent);">+22%</div>
+            <h3 style="margin-top: 12px;">Consult Recovery</h3>
+            <p style="color: var(--muted); font-size: 14px;">Recovered significantly more booked consults through automated intelligent follow-up.</p>
+          </div>
+          <div class="card glass">
+            <div style="font-family: var(--font-display); font-size: 48px; font-weight: 700; color: var(--accent);">10x</div>
+            <h3 style="margin-top: 12px;">Scalability</h3>
+            <p style="color: var(--muted); font-size: 14px;">Systems engineered for massive volume without any increase in administrative overhead.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- V. QUALIFIERS -->
+    <section class="section" id="qualifiers" data-od-id="qualifiers">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">V.</span>
+          <span class="meta">Who We Work With</span>
+          <span class="meta">005 / 009</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h2 class="h3" style="color: var(--accent);">This is for you if:</h2>
+            <ul class="qualifier-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>You're doing $500K+ in annual revenue</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>You're losing time or leads to manual, disconnected processes</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>You want systems that run without you micromanaging them</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h2 class="h3" style="color: var(--muted);">This isn't a fit if:</h2>
+            <ul class="qualifier-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>You're looking for the cheapest option available</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>You're not ready to change how your team currently operates</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>You want a one-time fix rather than an ongoing system</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VI. THE EDGE -->
+    <section class="section" data-od-id="the-edge">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">VI.</span>
+          <span class="meta">The Growth Advantage</span>
+          <span class="meta">006 / 009</span>
+        </div>
+        <div class="grid-2">
+          <div style="aspect-ratio: 4/5; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;">Systems Visual</div>
+          <div style="padding-left: var(--gap-lg);">
+            <p class="eyebrow">WHY CHOOSE US</p>
+            <h2 class="h2">Modern systems for <span class="italic">modern businesses</span><span class="dot">.</span></h2>
+            <ul style="list-style: none; padding: 0; margin-top: 32px;">
+              <li style="padding-block: 16px; border-top: 1px solid var(--border);"><span style="color: var(--accent); margin-right: 12px;">01.</span> <span style="font-weight: 600;">Custom Digital Solutions</span></li>
+              <li style="padding-block: 16px; border-top: 1px solid var(--border);"><span style="color: var(--accent); margin-right: 12px;">02.</span> <span style="font-weight: 600;">Scalable Processes</span></li>
+              <li style="padding-block: 16px; border-top: 1px solid var(--border);"><span style="color: var(--accent); margin-right: 12px;">03.</span> <span style="font-weight: 600;">AI-Driven Intelligence</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VII. ROADMAP -->
+    <section class="section" data-od-id="process">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">VII.</span>
+          <span class="meta">Implementation Roadmap</span>
+          <span class="meta">007 / 009</span>
+        </div>
+        <div class="grid-3">
+          <div><span style="font-size: 32px; color: var(--accent);">01</span><h3 style="margin-top:12px;">Discovery</h3><p style="color: var(--muted); font-size: 14px;">Audit of current systems and market positioning.</p></div>
+          <div><span style="font-size: 32px; color: var(--accent);">02</span><h3 style="margin-top:12px;">Build</h3><p style="color: var(--muted); font-size: 14px;">Engineering AI integrations and digital surfaces.</p></div>
+          <div><span style="font-size: 32px; color: var(--accent);">03</span><h3 style="margin-top:12px;">Scale</h3><p style="color: var(--muted); font-size: 14px;">Optimizing engines for exponential growth.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIII. VISION -->
+    <section class="section" id="vision" data-od-id="vision">
+      <div class="container">
+        <div class="sec-rule">
+          <span class="roman">VIII.</span>
+          <span class="meta">Strategic Vision</span>
+          <span class="meta">008 / 009</span>
+        </div>
+        <div class="grid-2">
+          <div class="card glass" style="padding: 0; overflow: hidden;">
+             <div style="aspect-ratio: 16/10; background: #000; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="height: 20px; width: 100%; background: #1a1a1a;"></div>
+                <div style="display: flex; gap: 10px;"><div style="height: 60px; width: 30%; background: #222;"></div><div style="height: 60px; width: 30%; background: #222;"></div></div>
+                <div style="height: 100px; width: 100%; background: #111; border: 1px solid #333;"></div>
+             </div>
+             <div style="padding: 24px;"><h3>Elite Dashboard Concept</h3><p style="color: var(--muted); font-size: 14px;">Real-time lead status updated across every channel.</p></div>
+          </div>
+          <div class="card glass" style="padding: 0; overflow: hidden;">
+             <div style="aspect-ratio: 16/10; background: #000; padding: 20px; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 100 60" style="width: 80%;"><rect x="10" y="25" width="20" height="10" fill="#1a1a1a" stroke="#d4af37"/><path d="M30 30 H45" stroke="#333"/><rect x="45" y="15" width="25" height="30" fill="#d4af37"/><path d="M70 30 H85" stroke="#333"/></svg>
+             </div>
+             <div style="padding: 24px;"><h3>Elite Management Workflow</h3><p style="color: var(--muted); font-size: 14px;">Autonomous qualification and routing engine logic.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IX. ENGAGEMENT -->
+    <section class="section" id="contact" style="text-align: center;">
+      <div class="container" style="max-width: 800px;">
+        <div class="sec-rule" style="justify-content: center;"><span class="roman">IX.</span></div>
+        <h2 class="h1">Your Brand Deserves <br><span class="italic">More Than Average</span><span class="dot">.</span></h2>
+        <p class="lead" style="margin: 32px auto 48px;">Take the first step toward building your digital empire.</p>
+        <button onclick="document.getElementById('bookingModal').style.display='flex'" class="btn btn-gold">Book A Strategy Call</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="logo">GROWTHPILOT <span>GROUP</span></div>
+      <div class="footer-big">GROWTHPILOT.</div>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div id="bookingModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#0d0d0d;border:1px solid var(--accent);padding:40px;max-width:500px;width:90%;position:relative;">
+      <span onclick="document.getElementById('bookingModal').style.display='none'" style="position:absolute;top:10px;right:15px;cursor:pointer;color:var(--accent);">✕</span>
+      <h2 style="color:#fff;margin-bottom:24px;font-family:var(--font-display);">Book a Strategy Call</h2>
+      <input type="text" placeholder="Full Name" style="width:100%;padding:12px;margin-bottom:12px;background:#1a1a1a;border:1px solid #333;color:#fff;">
+      <input type="email" placeholder="Email" style="width:100%;padding:12px;margin-bottom:12px;background:#1a1a1a;border:1px solid #333;color:#fff;">
+      <select style="width:100%;padding:12px;margin-bottom:12px;background:#1a1a1a;border:1px solid #333;color:#fff;">
+        <option>What do you need help with?</option>
+        <option>AI Automation Systems</option>
+        <option>Full Growth Package (Marketing + Automation)</option>
+        <option>Website Design & Development</option>
+        <option>Social Media Management</option>
+        <option>Other</option>
+      </select>
+      <button style="width:100%;padding:16px;background:var(--accent);color:#000;font-weight:700;border:none;cursor:pointer;font-family:var(--font-display);text-transform:uppercase;">Submit Request →</button>
+    </div>
+  </div>
+</body>
+</html>
